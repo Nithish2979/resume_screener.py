@@ -86,9 +86,9 @@ def generate_detailed_suggestions(job_desc, resume_text):
 
 # --- Circular Score Chart ---
 def draw_score_chart(score):
-    fig, ax = plt.subplots(figsize=(2.2, 2.2))
+    fig, ax = plt.subplots(figsize=(1.5, 1.5))
     wedges, _ = ax.pie([score, 100 - score], startangle=90, colors=['#4CAF50', '#eeeeee'], wedgeprops=dict(width=0.3))
-    ax.text(0, 0, f"{score}%", ha='center', va='center', fontsize=12, weight='bold')
+    ax.text(0, 0, f"{score}%", ha='center', va='center', fontsize=10, weight='bold')
     ax.set(aspect="equal")
     plt.tight_layout()
     return fig
@@ -123,10 +123,16 @@ if st.session_state.results:
     st.subheader("📊 Resume Match Results")
     for i, (name, score, suggestions) in enumerate(st.session_state.results, 1):
         st.markdown(f"### {i}. {name}")
-        fig = draw_score_chart(score)
-        st.pyplot(fig)
 
-        show_suggestions = st.checkbox(f"💡 Show Suggestions for {name}", key=f"suggestions_{i}")
+        #layout in colums 
+        col1 , col2 = st.columns([1,2])
+
+        with col1:
+            fig = draw_score_chart(score)
+            st.pyplot(fig)
+        
+        with col2:
+            show_suggestions = st.checkbox(f"💡 Show Suggestions for {name}", key=f"suggestions_{i}")
         if show_suggestions:
             st.markdown("#### 📌 Breakdown of ATS Evaluation")
             for s in suggestions:
